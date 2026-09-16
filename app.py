@@ -23,9 +23,14 @@ def init_db():
             loc TEXT NOT NULL,
             phone TEXT NOT NULL,
             desc TEXT NOT NULL,
+            photo TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    # Migration: add the photo column if the table already existed without it
+    existing_cols = [r['name'] for r in conn.execute('PRAGMA table_info(listings)')]
+    if 'photo' not in existing_cols:
+        conn.execute('ALTER TABLE listings ADD COLUMN photo TEXT')
     conn.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,11 +91,15 @@ def create_listing():
 
     price = data.get('price')
     price = int(price) if price not in (None, '') else None
+    photo = data.get('photo') or None
+    # Basic safety cap: refuse absurdly large payloads (~3MB of base64 text)
+    if photo and len(photo) > 3_000_000:
+        return jsonify({'error': "Photo trop volumineuse."}), 400
 
     conn = get_db()
     cur = conn.execute(
-        'INSERT INTO listings (title, cat, price, loc, phone, desc) VALUES (?,?,?,?,?,?)',
-        (data['title'], data['cat'], price, data['loc'], data['phone'], data['desc'])
+        'INSERT INTO listings (title, cat, price, loc, phone, desc, photo) VALUES (?,?,?,?,?,?,?)',
+        (data['title'], data['cat'], price, data['loc'], data['phone'], data['desc'], photo)
     )
     conn.commit()
     new_id = cur.lastrowid
@@ -131,4 +140,4 @@ def index():
 init_db()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5050, debug=True)
+    app.run(host='0.0.0.0', port=5050, debug
