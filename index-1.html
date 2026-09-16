@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xaamay-Iibso — Petites annonces à Djibouti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand: #F2ECDD;
+    --sand-dim: #EAE2CC;
+    --ink: #1B2B2B;
+    --ink-soft: #4B5A56;
+    --sea: #14646B;
+    --sea-dark: #0E4A50;
+    --gold: #D9A441;
+    --gold-dark: #B8842E;
+    --coral: #B34F36;
+    --line: #D8CFB8;
+    --white: #FFFDF8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Work Sans', sans-serif;
+    background:var(--sand);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 20px; }
+
+  /* Header */
+  header{ background:var(--sea-dark); color:var(--white); }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; max-width:1080px; margin:0 auto; gap:16px; flex-wrap:wrap; }
+  .logo{ display:flex; align-items:baseline; gap:8px; }
+  .logo .mark{ font-family:'Fraunces', serif; font-weight:700; font-size:1.55rem; color:var(--gold); }
+  .logo .sub{ font-size:0.72rem; color:#CFE3E1; opacity:0.85; }
+  .postad-btn{ background:var(--gold); color:var(--sea-dark); padding:10px 18px; border-radius:3px; font-weight:600; font-size:0.9rem; white-space:nowrap; }
+  .postad-btn:hover{ background:#E5B65B; }
+
+  /* Hero */
+  .hero{ background:var(--sea); color:var(--white); padding:46px 20px 64px; }
+  .hero-inner{ max-width:1080px; margin:0 auto; }
+  .hero h1{ font-size:2.3rem; max-width:15ch; line-height:1.15; color:var(--white); }
+  .hero p{ margin-top:10px; color:#D7E7E5; max-width:46ch; font-size:1.02rem; }
+
+  .search-row{ margin-top:26px; display:flex; background:var(--white); border-radius:3px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.18); max-width:640px; }
+  .search-row input{ flex:1; border:none; padding:14px 16px; font-size:0.98rem; font-family:inherit; color:var(--ink); background:transparent; }
+  .search-row input:focus{ outline:none; }
+  .search-row button{ background:var(--coral); color:var(--white); padding:0 22px; font-weight:600; font-size:0.92rem; }
+  .search-row button:hover{ background:#9E432C; }
+
+  /* Categories */
+  .cat-strip{ margin-top:-34px; padding-bottom:10px; }
+  .cat-scroll{ display:flex; gap:10px; overflow-x:auto; padding:4px 2px 14px; scrollbar-width:none; }
+  .cat-scroll::-webkit-scrollbar{ display:none; }
+  .cat-chip{
+    flex:0 0 auto; background:var(--white); border:1px solid var(--line); border-radius:3px;
+    padding:12px 16px; font-size:0.86rem; font-weight:500; color:var(--ink-soft);
+    display:flex; align-items:center; gap:8px; white-space:nowrap;
+  }
+  .cat-chip .ic{ font-size:1.05rem; }
+  .cat-chip.active{ background:var(--sea-dark); color:var(--white); border-color:var(--sea-dark); }
+  .cat-chip:hover:not(.active){ border-color:var(--sea); color:var(--sea-dark); }
+
+  /* Listings */
+  main{ padding:34px 0 70px; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:8px; }
+  .section-head h2{ font-size:1.35rem; }
+  .count{ color:var(--ink-soft); font-size:0.86rem; }
+
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  @media(min-width:640px){ .grid{ grid-template-columns:repeat(3,1fr); } }
+  @media(min-width:900px){ .grid{ grid-template-columns:repeat(4,1fr); } }
+
+  .card{ background:var(--white); border:1px solid var(--line); border-radius:4px; overflow:hidden; text-align:left; display:flex; flex-direction:column; }
+  .card:hover{ border-color:var(--sea); }
+  .thumb{ aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; font-size:2rem; }
+  .card-body{ padding:12px 14px 14px; display:flex; flex-direction:column; gap:4px; flex:1; }
+  .card-title{ font-size:0.92rem; font-weight:600; line-height:1.3; }
+  .card-price{ font-family:'Fraunces', serif; font-weight:600; color:var(--sea-dark); font-size:1.02rem; margin-top:2px; }
+  .card-loc{ font-size:0.78rem; color:var(--ink-soft); margin-top:auto; padding-top:6px; }
+  .card-cat{ font-size:0.7rem; color:var(--gold-dark); font-weight:600; text-transform:uppercase; letter-spacing:0.03em; }
+
+  .empty{ text-align:center; padding:60px 20px; color:var(--ink-soft); }
+  .empty h3{ color:var(--ink); margin-bottom:6px; }
+
+  /* Modal */
+  .overlay{ position:fixed; inset:0; background:rgba(15,25,25,0.55); display:none; align-items:flex-start; justify-content:center; padding:24px 16px; overflow-y:auto; z-index:50; }
+  .overlay.open{ display:flex; }
+  .modal{ background:var(--white); border-radius:6px; max-width:560px; width:100%; margin-top:20px; overflow:hidden; }
+  .modal-head{ background:var(--sea-dark); color:var(--white); padding:18px 22px; display:flex; justify-content:space-between; align-items:center; }
+  .modal-head h3{ color:var(--white); font-size:1.1rem; }
+  .modal-close{ color:var(--white); font-size:1.3rem; opacity:0.8; padding:4px; }
+  .modal-close:hover{ opacity:1; }
+  .modal-body{ padding:22px; }
+
+  .detail-thumb{ aspect-ratio:16/9; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:3rem; margin-bottom:16px; }
+  .detail-price{ font-family:'Fraunces', serif; font-size:1.5rem; font-weight:600; color:var(--sea-dark); }
+  .detail-meta{ color:var(--ink-soft); font-size:0.88rem; margin:6px 0 16px; }
+  .detail-desc{ font-size:0.94rem; line-height:1.6; color:var(--ink); }
+  .detail-contact{ margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }
+  .detail-contact .lbl{ font-size:0.78rem; color:var(--ink-soft); margin-bottom:4px; }
+  .detail-contact .val{ font-weight:600; }
+
+  form .field{ margin-bottom:16px; }
+  form label{ display:block; font-size:0.85rem; font-weight:600; margin-bottom:6px; color:var(--ink); }
+  form input, form select, form textarea{
+    width:100%; border:1px solid var(--line); border-radius:3px; padding:11px 12px;
+    font-family:inherit; font-size:0.92rem; color:var(--ink); background:var(--sand);
+  }
+  form input:focus, form select:focus, form textarea:focus{ outline:2px solid var(--sea); outline-offset:1px; }
+  form textarea{ min-height:90px; resize:vertical; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .submit-btn{ background:var(--sea-dark); color:var(--white); padding:13px; border-radius:3px; font-weight:600; width:100%; font-size:0.95rem; margin-top:4px; }
+  .submit-btn:hover{ background:var(--sea); }
+  .form-note{ font-size:0.78rem; color:var(--ink-soft); margin-top:10px; text-align:center; }
+
+  footer{ background:var(--sea-dark); color:#CFE3E1; padding:28px 20px; text-align:center; font-size:0.82rem; }
+  footer .mark{ font-family:'Fraunces', serif; color:var(--gold); font-weight:700; }
+
+  .toast{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:var(--white); padding:12px 22px; border-radius:4px; font-size:0.88rem;
+    opacity:0; transition:all 0.25s ease; z-index:60; pointer-events:none;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="logo">
+      <span class="mark">Xaamay-Iibso</span>
+      <span class="sub">petites annonces · Djibouti</span>
+    </div>
+    <button class="postad-btn" id="openPostBtn">Déposer une annonce</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Achetez, vendez, louez — juste ici, à Djibouti.</h1>
+    <p>Voitures, logements, emploi, électronique et bien plus. Publiez en deux minutes, gratuitement.</p>
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Rechercher une annonce (ex. Toyota, appartement Héron...)">
+      <button id="searchBtn">Rechercher</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap cat-strip">
+  <div class="cat-scroll" id="catStrip"></div>
+</div>
+
+<main class="wrap">
+  <div class="section-head">
+    <h2 id="listHeading">Toutes les annonces</h2>
+    <span class="count" id="listCount"></span>
+  </div>
+  <div class="grid" id="listingsGrid"></div>
+</main>
+
+<footer>
+  <span class="mark">Xaamay-Iibso</span> — la place du marché de Djibouti. Démo de site, à des fins d'illustration.
+</footer>
+
+<!-- Detail modal -->
+<div class="overlay" id="detailOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Détail de l'annonce</h3>
+      <button class="modal-close" id="closeDetail">&times;</button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- Post ad modal -->
+<div class="overlay" id="postOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Déposer une annonce</h3>
+      <button class="modal-close" id="closePost">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="postForm">
+        <div class="field">
+          <label>Titre de l'annonce</label>
+          <input type="text" id="f-title" placeholder="Ex. Toyota Hilux 2018, très bon état" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Catégorie</label>
+            <select id="f-cat" required></select>
+          </div>
+          <div class="field">
+            <label>Prix (FDJ)</label>
+            <input type="number" id="f-price" placeholder="Ex. 1500000" min="0" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Quartier / localisation</label>
+          <input type="text" id="f-loc" placeholder="Ex. Balbala, Héron, PK12..." required>
+        </div>
+        <div class="field">
+          <label>Photo (optionnel)</label>
+          <input type="file" id="f-photo" accept="image/*">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea id="f-desc" placeholder="Décrivez votre article ou service..." required></textarea>
+        </div>
+        <div class="field">
+          <label>Numéro de contact</label>
+          <input type="tel" id="f-phone" placeholder="77 XX XX XX" required>
+        </div>
+        <button type="submit" class="submit-btn">Publier l'annonce</button>
+        <p class="form-note">Démo — les annonces publiées ne sont visibles que dans cette session.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ---- Data ----
+  const CATEGORIES = [
+    { id:'vehicules',   label:'Véhicules',       icon:'🚗' },
+    { id:'immobilier',  label:'Immobilier',      icon:'🏠' },
+    { id:'emploi',      label:'Emploi',          icon:'💼' },
+    { id:'electronique',label:'Électronique',    icon:'📱' },
+    { id:'meubles',     label:'Meubles & Maison',icon:'🛋️' },
+    { id:'services',    label:'Services',        icon:'🛠️' },
+    { id:'mode',        label:'Mode',            icon:'👗' },
+  ];
+
+  const CAT_COLORS = {
+    vehicules:   '#DDEFEF',
+    immobilier:  '#F1E6CE',
+    emploi:      '#E4E9D8',
+    electronique:'#E3E8EF',
+    meubles:     '#F0E2DA',
+    services:    '#E9E2F0',
+    mode:        '#F3E1E9',
+  };
+  const CAT_ICON = Object.fromEntries(CATEGORIES.map(c=>[c.id,c.icon]));
+
+  const API = '/api/listings';
+  let listings = [];       // now loaded from the backend, not hardcoded
+  let activeCat = 'all';
+  let searchTerm = '';
+
+  async function fetchListings(){
+    const params = new URLSearchParams();
+    if(activeCat !== 'all') params.set('cat', activeCat);
+    if(searchTerm) params.set('q', searchTerm);
+    const res = await fetch(`${API}?${params.toString()}`);
+    listings = await res.json();
+  }
+
+  // ---- Render categories ----
+  const catStrip = document.getElementById('catStrip');
+  function renderCategories(){
+    let html = `<button class="cat-chip ${activeCat==='all'?'active':''}" data-cat="all"><span class="ic">🔎</span>Toutes</button>`;
+    CATEGORIES.forEach(c=>{
+      html += `<button class="cat-chip ${activeCat===c.id?'active':''}" data-cat="${c.id}"><span class="ic">${c.icon}</span>${c.label}</button>`;
+    });
+    catStrip.innerHTML = html;
+    catStrip.querySelectorAll('.cat-chip').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ activeCat = btn.dataset.cat; renderCategories(); renderListings(); });
+    });
+  }
+
+  // ---- Render listings ----
+  const grid = document.getElementById('listingsGrid');
+  const heading = document.getElementById('listHeading');
+  const countEl = document.getElementById('listCount');
+
+  function formatPrice(cat, price){
+    if(price === null || price === undefined) return 'Salaire à négocier';
+    return price.toLocaleString('fr-FR') + ' FDJ' + (cat==='immobilier' ? ' /mois' : '');
+  }
+
+  async function renderListings(){
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">Chargement…</div>`;
+    await fetchListings();
+    let items = listings;
+
+    heading.textContent = activeCat==='all' ? 'Toutes les annonces' : CATEGORIES.find(c=>c.id===activeCat).label;
+    countEl.textContent = items.length + (items.length>1 ? ' annonces' : ' annonce');
+
+    if(items.length===0){
+      grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><h3>Aucune annonce trouvée</h3><p>Essayez une autre recherche ou catégorie.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = items.map(l=>`
+      <button class="card" data-id="${l.id}">
+        <div class="thumb" style="background:${CAT_COLORS[l.cat]}">
+          ${l.photo ? `<img src="${l.photo}" style="width:100%;height:100%;object-fit:cover">` : CAT_ICON[l.cat]}
+        </div>
+        <div class="card-body">
+          <span class="card-cat">${CATEGORIES.find(c=>c.id===l.cat).label}</span>
+          <span class="card-title">${l.title}</span>
+          <span class="card-price">${formatPrice(l.cat, l.price)}</span>
+          <span class="card-loc">${l.loc}</span>
+        </div>
+      </button>
+    `).join('');
+
+    grid.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('click', ()=> openDetail(parseInt(card.dataset.id)));
+    });
+  }
+
+  // ---- Search ----
+  document.getElementById('searchBtn').addEventListener('click', ()=>{
+    searchTerm = document.getElementById('searchInput').value.trim();
+    renderListings();
+  });
+  document.getElementById('searchInput').addEventListener('keydown', (e)=>{
+    if(e.key==='Enter'){ searchTerm = e.target.value.trim(); renderListings(); }
+  });
+
+  // ---- Detail modal ----
+  const detailOverlay = document.getElementById('detailOverlay');
+  const detailBody = document.getElementById('detailBody');
+  function openDetail(id){
+    const l = listings.find(x=>x.id===id);
+    if(!l) return;
+    detailBody.innerHTML = `
+      <div class="detail-thumb" style="background:${CAT_COLORS[l.cat]}">
+        ${l.photo ? `<img src="${l.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:4px">` : CAT_ICON[l.cat]}
+      </div>
+      <span class="card-cat">${CATEGORIES.find(c=>c.id===l.cat).label}</span>
+      <h3 style="margin:6px 0 2px; font-size:1.2rem;">${l.title}</h3>
+      <div class="detail-price">${formatPrice(l.cat, l.price)}</div>
+      <div class="detail-meta">${l.loc}</div>
+      <p class="detail-desc">${l.desc}</p>
+      <div class="detail-contact">
+        <div class="lbl">Contacter l'annonceur</div>
+        <div class="val">${l.phone}</div>
+      </div>
+    `;
+    detailOverlay.classList.add('open');
+  }
+  document.getElementById('closeDetail').addEventListener('click', ()=> detailOverlay.classList.remove('open'));
+  detailOverlay.addEventListener('click', (e)=>{ if(e.target===detailOverlay) detailOverlay.classList.remove('open'); });
+
+  // ---- Post ad modal ----
+  const postOverlay = document.getElementById('postOverlay');
+  document.getElementById('openPostBtn').addEventListener('click', ()=> postOverlay.classList.add('open'));
+  document.getElementById('closePost').addEventListener('click', ()=> postOverlay.classList.remove('open'));
+  postOverlay.addEventListener('click', (e)=>{ if(e.target===postOverlay) postOverlay.classList.remove('open'); });
+
+  const catSelect = document.getElementById('f-cat');
+  catSelect.innerHTML = CATEGORIES.map(c=>`<option value="${c.id}">${c.label}</option>`).join('');
+
+  const toast = document.getElementById('toast');
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(()=> toast.classList.remove('show'), 2400);
+  }
+
+  // Shrinks a photo client-side before sending it, so uploads stay fast
+  function compressImage(file, maxWidth=900, quality=0.72){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = (e)=>{
+        const img = new Image();
+        img.onerror = reject;
+        img.onload = ()=>{
+          const scale = Math.min(1, maxWidth / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.getElementById('postForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('.submit-btn');
+    submitBtn.disabled = true; submitBtn.textContent = 'Publication…';
+
+    const priceVal = document.getElementById('f-price').value;
+    const photoFile = document.getElementById('f-photo').files[0];
+    let photoData = null;
+    try{
+      if(photoFile) photoData = await compressImage(photoFile);
+    }catch(err){ /* if compression fails, publish without the photo */ }
+
+    const payload = {
+      title: document.getElementById('f-title').value.trim(),
+      cat: document.getElementById('f-cat').value,
+      price: priceVal ? parseInt(priceVal,10) : null,
+      loc: document.getElementById('f-loc').value.trim(),
+      phone: document.getElementById('f-phone').value.trim(),
+      desc: document.getElementById('f-desc').value.trim(),
+      photo: photoData,
+    };
+
+    try{
+      const res = await fetch(API, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if(!res.ok){ const err = await res.json(); throw new Error(err.error || 'Erreur'); }
+
+      e.target.reset();
+      postOverlay.classList.remove('open');
+      activeCat = 'all'; searchTerm=''; document.getElementById('searchInput').value='';
+      renderCategories(); await renderListings();
+      showToast('Annonce publiée avec succès !');
+    }catch(err){
+      showToast(err.message || "Erreur lors de la publication.");
+    }finally{
+      submitBtn.disabled = false; submitBtn.textContent = "Publier l'annonce";
+    }
+  });
+
+  // ---- Init ----
+  renderCategories();
+  renderListings();
+</script>
+
+</body>
+</html>
