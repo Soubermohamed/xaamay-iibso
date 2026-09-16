@@ -1,0 +1,39 @@
+XAAMAY-IIBSO — Guide de démarrage du backend
+================================================
+
+CE QU'IL Y A DANS CE DOSSIER
+- index.html   → le site (frontend)
+- app.py       → le serveur (backend) qui gère les annonces
+- xaamay_iibso.db → la base de données (créée automatiquement au premier lancement)
+
+FAIRE TOURNER LE SITE SUR TON ORDINATEUR
+1. Installer Python (si ce n'est pas déjà fait) : https://www.python.org
+2. Ouvrir un terminal dans ce dossier
+3. Installer Flask :
+      pip install flask
+4. Lancer le serveur :
+      python app.py
+5. Ouvrir un navigateur à l'adresse :
+      http://127.0.0.1:5050
+
+À partir de là :
+- Les annonces publiées sont VRAIMENT enregistrées dans le fichier xaamay_iibso.db
+- Si tu arrêtes et relances le serveur, les annonces sont toujours là
+- Plusieurs personnes peuvent voir les mêmes annonces si elles accèdent au même serveur
+
+METTRE LE SITE EN LIGNE (pour que n'importe qui y accède, pas juste toi)
+Ce serveur tourne actuellement seulement sur ta machine. Pour que le public y accède
+depuis internet, il faut l'héberger quelque part. Options simples et peu coûteuses :
+- Render.com (a un plan gratuit, facile pour Flask)
+- Railway.app
+- PythonAnywhere.com
+
+Sur ces plateformes : tu déposes ces mêmes fichiers, tu obtiens une adresse
+du type https://xaamay-iibso.onrender.com, et ensuite tu peux relier un vrai
+nom de domaine (ex. xaamay-iibso.dj ou .com) acheté chez un registrar
+(Namecheap, OVH, etc.).
+
+PROCHAINES ÉTAPES UTILES
+- Ajouter de vraies photos d'annonces (stockage d'images)
+- Ajouter des comptes utilisateurs (pour gérer "mes annonces")
+- Ajouter une modération (supprimer les annonces frauduleuses)
